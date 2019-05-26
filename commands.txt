@@ -1,4 +1,4 @@
-docker run -d --runtime=nvidia --name mydl -p 8888:8888 -p 6006:6006 -p 5555:5555 -p 5556:5556 -v /home/alan/Desktop/:/share -it alanchaw/keras-gpu-jupyter:v1.2 bash
+docker run -d --runtime=nvidia --name mydl -p 8888:8888 -p 6006:6006 -p 5555:5555 -p 5556:5556 -v /home/ubuntu/:/share -it alanchaw/keras-gpu-jupyter:v1.1 bash
 
 docker exec -it mydl bash
 
@@ -13,8 +13,8 @@ export BERT_BASE_DIR=/share/ShareFolder/uncased_L-24_H-1024_A-16
 
 
 
-export BERT_BASE_DIR=/share/ShareFolder/cased_L-12_H-768_A-12
-export MY_DATASET=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/mydata
+export BERT_BASE_DIR=/home/ubuntu/cased_L-12_H-768_A-12
+export MY_DATASET=/share/LabelPrediction/TrainSentence/BERT_finetune/mydata
 
 python run_classifier.py \
   --task_name=myown \
@@ -62,14 +62,14 @@ python run_classifier2.py \
   --do_train=true \
   --do_eval=true \
   --do_predict=true \
-  --data_dir=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/LabelData \
+  --data_dir=/home/ubuntu/LabelPrediction/TrainSentence/BERT_finetune/LabelData \
   --vocab_file=$BERT_BASE_DIR/vocab.txt \
   --bert_config_file=$BERT_BASE_DIR/bert_config.json \
   --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
   --do_lower_case=False \
-  --max_seq_length=60 \
+  --max_seq_length=150 \
   --train_batch_size=32 \
   --learning_rate=2e-5 \
-  --num_train_epochs=1.0 \
-  --output_dir=/share/label_test/
+  --num_train_epochs=2.0 \
+  --output_dir=/home/ubuntu/label_test/
 
