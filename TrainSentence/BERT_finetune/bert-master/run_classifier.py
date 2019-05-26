@@ -79,9 +79,9 @@ flags.DEFINE_bool("do_predict", False, "Whether to run the model in inference mo
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
-flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
+flags.DEFINE_integer("eval_batch_size", 128, "Total batch size for eval.")
 
-flags.DEFINE_integer("predict_batch_size", 8, "Total batch size for predict.")
+flags.DEFINE_integer("predict_batch_size", 128, "Total batch size for predict.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
@@ -238,17 +238,17 @@ class MyProcessor2(DataProcessor):
   def get_train_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "bert_data_train_shuffle_top5_res.tsv")), "train")
+        self._read_tsv(os.path.join(data_dir, "train_top7_shuffle.tsv")), "train")
 
   def get_dev_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "bert_dev_shuffle_res_duplicate.tsv")), "dev")
+        self._read_tsv(os.path.join(data_dir, "dev_top7.tsv")), "dev")
 
   def get_test_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
+        self._read_tsv(os.path.join(data_dir, "dev_top7.tsv")), "test")
 
   def get_labels(self):
     """See base class."""
@@ -262,9 +262,11 @@ class MyProcessor2(DataProcessor):
         continue
       guid = "%s-%s" % (set_type, i)
       text_a = tokenization.convert_to_unicode(line[1])
-      text_b = tokenization.convert_to_unicode(line[2])
+      text_b = tokenization.convert_to_unicode(line[4])
       if set_type == "test":
         label = "0"
+        text_a = tokenization.convert_to_unicode(line[1])
+        text_b = tokenization.convert_to_unicode(line[4])
       else:
         label = tokenization.convert_to_unicode(line[3])
       examples.append(
