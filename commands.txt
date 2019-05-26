@@ -1,0 +1,75 @@
+docker run -d --runtime=nvidia --name mydl -p 8888:8888 -p 6006:6006 -p 5555:5555 -p 5556:5556 -v /home/alan/Desktop/:/share -it alanchaw/keras-gpu-jupyter:v1.2 bash
+
+docker exec -it mydl bash
+
+nohup jupyter notebook --notebook-dir=/share --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.password='' --NotebookApp.token='' &
+
+
+
+import tensorflow as tf
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+
+export BERT_BASE_DIR=/share/ShareFolder/uncased_L-24_H-1024_A-16
+
+
+
+export BERT_BASE_DIR=/share/ShareFolder/cased_L-12_H-768_A-12
+export MY_DATASET=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/mydata
+
+python run_classifier.py \
+  --task_name=myown \
+  --do_train=true \
+  --do_eval=true \
+  --data_dir=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/mydata \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --do_lower_case=False \
+  --max_seq_length=50 \
+  --train_batch_size=32 \
+  --learning_rate=2e-5 \
+  --num_train_epochs=4.0 \
+  --output_dir=/share/my_test_old/
+
+
+export BERT_BASE_DIR=/share/ShareFolder/cased_L-12_H-768_A-12
+export GLUE_DIR=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune
+
+
+
+export BERT_BASE_DIR=/share/ShareFolder/cased_L-12_H-768_A-12
+export MY_DATASET=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/SentenceData
+
+python run_classifier.py \
+  --task_name=myown2 \
+  --do_train=true \
+  --do_eval=true \
+  --data_dir=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/SentenceData \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --do_lower_case=False \
+  --max_seq_length=60 \
+  --train_batch_size=32 \
+  --learning_rate=2e-5 \
+  --num_train_epochs=2.0 \
+  --output_dir=/share/norep_top7_64/
+
+
+
+python run_classifier2.py \
+  --task_name=label \
+  --do_train=true \
+  --do_eval=true \
+  --do_predict=true \
+  --data_dir=/share/ShareFolder/LabelPrediction/TrainSentence/BERT_finetune/LabelData \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --do_lower_case=False \
+  --max_seq_length=60 \
+  --train_batch_size=32 \
+  --learning_rate=2e-5 \
+  --num_train_epochs=1.0 \
+  --output_dir=/share/label_test/
+

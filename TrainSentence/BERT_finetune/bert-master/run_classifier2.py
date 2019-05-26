@@ -209,7 +209,7 @@ class LabelProcessor(DataProcessor):
   def get_test_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "dev_top7.tsv")), "test")
+        self._read_tsv(os.path.join(data_dir, "dev_new3_pair.tsv")), "test")
 
   def get_labels(self):
     """See base class."""
@@ -770,8 +770,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
-      "myown": MyProcessor,
-      "myown2": MyProcessor2,
+      "label": LabelProcessor,
   }
 
   if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_predict:
