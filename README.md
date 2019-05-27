@@ -1,4 +1,4 @@
-# AutomaticFactVerification
+# AutomaticFactVerification - LabelPrediction
 web search project
 
 ## Fine-tuned BERT model for Sentence Selection
